@@ -18,7 +18,9 @@ void UPositionReport::BeginPlay()
 {
     Super::BeginPlay();
 
-    UE_LOG(LogTemp, Warning, TEXT("Position Report online for %s"), *GetOwner()->GetName());
+    AActor* ThisComponent = GetOwner();
+    FString ObjectPos = ThisComponent->GetTransform().GetLocation().ToString();
+    UE_LOG(LogTemp, Warning, TEXT("%s is at (%s)"), *(ThisComponent->GetName()), *ObjectPos);
 }
 
 
