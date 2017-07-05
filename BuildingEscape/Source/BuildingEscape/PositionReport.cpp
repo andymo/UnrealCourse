@@ -18,8 +18,7 @@ void UPositionReport::BeginPlay()
 {
     Super::BeginPlay();
 
-    UE_LOG(LogTemp, Warning, TEXT("Position Report Online"));
-	
+    UE_LOG(LogTemp, Warning, TEXT("Position Report online for %s"), *GetOwner()->GetName());
 }
 
 
