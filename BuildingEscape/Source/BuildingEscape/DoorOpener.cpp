@@ -18,6 +18,8 @@ UDoorOpener::UDoorOpener()
 void UDoorOpener::BeginPlay()
 {
     Super::BeginPlay();
+
+    MainPawn = GetWorld()->GetFirstPlayerController()->GetPawn();
 }
 
 
