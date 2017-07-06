@@ -19,6 +19,7 @@ void UDoorOpener::BeginPlay()
 {
     Super::BeginPlay();
 
+    ThisComponent = GetOwner();
     MainPawn = GetWorld()->GetFirstPlayerController()->GetPawn();
 }
 
@@ -29,16 +30,21 @@ void UDoorOpener::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	if (PressurePlate->IsOverlappingActor(MainPawn)) {
-        UE_LOG(LogTemp, Warning, TEXT("WE MADE IT FAMMMMMM"));
         OpenDoor();
+        LastDoorOpenTime = GetWorld()->GetTimeSeconds();
+    }
+
+    if (LastDoorOpenTime + DoorCloseDelay <= GetWorld()->GetTimeSeconds()) {
+        CloseDoor();
     }
 }
 
 void UDoorOpener::OpenDoor()
 {
-    AActor* ThisComponent = GetOwner();
-    FString Roto = ThisComponent->GetTransform().GetRotation().ToString();
+    ThisComponent->SetActorRotation(FRotator(0.0f, OpenAngle, 0.0f));
+}
 
-    FRotator NewRotation = FRotator(0.0f, 60.0f, 0.0f);
-    ThisComponent->SetActorRotation(NewRotation);
+void UDoorOpener::CloseDoor()
+{
+    ThisComponent->SetActorRotation(FRotator(0.0f, 0.0f, 0.0f));
 }
