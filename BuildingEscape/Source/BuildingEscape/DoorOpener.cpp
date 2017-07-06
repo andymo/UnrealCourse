@@ -17,14 +17,7 @@ UDoorOpener::UDoorOpener()
 // Called when the game starts
 void UDoorOpener::BeginPlay()
 {
-	Super::BeginPlay();
-
-    AActor* ThisComponent = GetOwner();
-    FString Roto = ThisComponent->GetTransform().GetRotation().ToString();
-    UE_LOG(LogTemp, Warning, TEXT("%s is rotated to (%s)"), *(ThisComponent->GetName()), *Roto);
-
-    FRotator NewRotation = FRotator(0.0f, 60.0f, 0.0f);
-    ThisComponent->SetActorRotation(NewRotation);
+    Super::BeginPlay();
 }
 
 
@@ -33,6 +26,17 @@ void UDoorOpener::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// ...
+	if (PressurePlate->IsOverlappingActor(MainPawn)) {
+        UE_LOG(LogTemp, Warning, TEXT("WE MADE IT FAMMMMMM"));
+        OpenDoor();
+    }
 }
 
+void UDoorOpener::OpenDoor()
+{
+    AActor* ThisComponent = GetOwner();
+    FString Roto = ThisComponent->GetTransform().GetRotation().ToString();
+
+    FRotator NewRotation = FRotator(0.0f, 60.0f, 0.0f);
+    ThisComponent->SetActorRotation(NewRotation);
+}
