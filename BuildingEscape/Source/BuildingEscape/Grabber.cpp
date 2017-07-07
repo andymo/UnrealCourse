@@ -44,17 +44,33 @@ void UGrabber::SetupInputComponent() {
 void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
     Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-    // see what we hit
+    if (PhysicsHandle && PhysicsHandle->GrabbedComponent) {
+        FVector Location;
+        FRotator Rotation;
+
+        GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(Location, Rotation);
+        FVector LineTraceEnd = Location + Rotation.Vector() * Reach;
+        PhysicsHandle->SetTargetLocation(LineTraceEnd);
+    }
 }
 
 
 void UGrabber::Grab() {
-    GetBodyInReach();
+    if (PhysicsHandle) {
+        FHitResult HitResult = GetBodyInReach();
+
+        if (HitResult.GetActor()) {
+            auto ComponentToGrab = HitResult.GetComponent();
+            PhysicsHandle->GrabComponent(ComponentToGrab, NAME_None, ComponentToGrab->GetOwner()->GetActorLocation(), true);
+        }
+    }
 }
 
 
 void UGrabber::Release() {
-    UE_LOG(LogTemp, Warning, TEXT("down"));
+    if (PhysicsHandle) {
+        PhysicsHandle->ReleaseComponent();
+    }
 }
 
 
