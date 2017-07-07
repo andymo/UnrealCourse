@@ -29,6 +29,29 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// ...
+    FVector Location;
+    FRotator Rotation;
+	// Get player viewpoint
+    GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(Location, Rotation);
+
+    //UE_LOG(LogTemp, Warning, TEXT("Position: %s, Rotation: %s"), *(Location.ToString()), *(Rotation.ToString()))
+
+    // draw a red debug line
+    FVector LineTraceEnd = Location + Rotation.Vector() * Reach;
+    UKismetSystemLibrary::DrawDebugLine(GetWorld(), Location, LineTraceEnd, FColor(255, 0, 0), 0.f, 10.f);
+
+    // raycast out distance
+    FHitResult TraceHit;
+    FCollisionQueryParams TraceParams = FCollisionQueryParams(FName(TEXT("")), false, GetOwner());
+    if (GetWorld()->LineTraceSingleByObjectType(
+            TraceHit,
+            Location,
+            LineTraceEnd,
+            FCollisionObjectQueryParams(ECollisionChannel::ECC_PhysicsBody),
+            TraceParams)) {
+        UE_LOG(LogTemp, Warning, TEXT("HOLY SHIT WE HIT %s"), *(TraceHit.GetActor()->GetName()))
+    }
+
+    // see what we hit
 }
 
