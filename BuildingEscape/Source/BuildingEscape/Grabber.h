@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Components/ActorComponent.h"
+#include "Components/InputComponent.h"
+#include "PhysicsEngine/PhysicsHandleComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 
@@ -33,4 +35,11 @@ private:
     float Reach = 100.0f;
 
     UPhysicsHandleComponent* PhysicsHandle = nullptr;
+    UInputComponent* InputComponent = nullptr;
+
+    void GetPhysicsHandle();
+    void SetupInputComponent();
+    void Grab();
+    void Release();
+    const FHitResult GetBodyInReach();
 };
