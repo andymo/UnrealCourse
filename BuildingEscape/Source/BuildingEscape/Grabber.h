@@ -42,4 +42,5 @@ private:
     void Grab();
     void Release();
     const FHitResult GetBodyInReach();
+    TArray<FVector> GetReachLine();
 };

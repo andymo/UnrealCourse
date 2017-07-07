@@ -45,12 +45,7 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 {
     Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
     if (PhysicsHandle && PhysicsHandle->GrabbedComponent) {
-        FVector Location;
-        FRotator Rotation;
-
-        GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(Location, Rotation);
-        FVector LineTraceEnd = Location + Rotation.Vector() * Reach;
-        PhysicsHandle->SetTargetLocation(LineTraceEnd);
+        PhysicsHandle->SetTargetLocation(GetReachLine()[1]);
     }
 }
 
@@ -75,23 +70,29 @@ void UGrabber::Release() {
 
 
 const FHitResult UGrabber::GetBodyInReach() {
-    FVector Location;
-    FRotator Rotation;
-
-    GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(Location, Rotation);
-    FVector LineTraceEnd = Location + Rotation.Vector() * Reach;
-
     // raycast out distance
     FHitResult TraceHit;
     FCollisionQueryParams TraceParams = FCollisionQueryParams(FName(TEXT("")), false, GetOwner());
+    TArray<FVector> ReachLine = GetReachLine();
+
     if (GetWorld()->LineTraceSingleByObjectType(
             TraceHit,
-            Location,
-            LineTraceEnd,
+            ReachLine[0],
+            ReachLine[1],
             FCollisionObjectQueryParams(ECollisionChannel::ECC_PhysicsBody),
             TraceParams)) {
         UE_LOG(LogTemp, Warning, TEXT("HOLY SHIT WE HIT %s"), *(TraceHit.GetActor()->GetName()))
     }
 
     return TraceHit;
+}
+
+TArray<FVector> UGrabber::GetReachLine() {
+    FVector Location;
+    FRotator Rotation;
+
+    GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(Location, Rotation);
+
+    TArray<FVector> ReachLineArray = {Location, Location + Rotation.Vector() * Reach};
+    return ReachLineArray;
 }
