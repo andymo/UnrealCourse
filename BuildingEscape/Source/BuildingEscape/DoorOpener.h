@@ -39,9 +39,10 @@ private:
     UPROPERTY(EditAnywhere)
     float DoorCloseDelay = 1.0f;
 
-    UPROPERTY(EditAnywhere)
-    AActor* MainPawn;
-
     float LastDoorOpenTime;
     AActor* ThisComponent;
+
+    UPROPERTY(EditAnywhere)
+    float TriggerMass;
+    float GetPlateMass();
 };
