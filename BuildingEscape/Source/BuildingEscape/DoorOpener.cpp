@@ -29,26 +29,18 @@ void UDoorOpener::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	if (GetPlateMass() >= TriggerMass) {
-        OpenDoor();
-        LastDoorOpenTime = GetWorld()->GetTimeSeconds();
-    }
-
-    if (LastDoorOpenTime + DoorCloseDelay <= GetWorld()->GetTimeSeconds()) {
-        CloseDoor();
+        OnOpen.Broadcast();
+    } else {
+        OnClose.Broadcast();
     }
 }
 
-void UDoorOpener::OpenDoor()
-{
-    ThisComponent->SetActorRotation(FRotator(0.0f, OpenAngle, 0.0f));
-}
-
-void UDoorOpener::CloseDoor()
-{
-    ThisComponent->SetActorRotation(FRotator(0.0f, 0.0f, 0.0f));
-}
 
 float UDoorOpener::GetPlateMass() {
+    if (PressurePlate == nullptr) {
+        return 0;
+    }
+
     float TotalMass = 0;
     TArray<AActor*> ActorsOnPlate;
 
