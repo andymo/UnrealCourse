@@ -29,4 +29,9 @@ private:
     bool GetSightRayHitLocation(FVector& HitLocation) const;
 
     ATank* ControlledTank;
+
+    UPROPERTY(EditAnywhere)
+    float CrosshairXLocation = 0.5f;
+    UPROPERTY(EditAnywhere)
+    float CrosshairYLocation = 0.333333333f;
 };
