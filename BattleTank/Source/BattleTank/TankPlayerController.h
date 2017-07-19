@@ -2,7 +2,6 @@
 
 #pragma once
 
-
 #include "Tank.h"
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
@@ -19,5 +18,5 @@ class BATTLETANK_API ATankPlayerController : public APlayerController
 public:
     ATank* GetControlledTank() const;
 	
-	
+	virtual void BeginPlay() override;
 };
