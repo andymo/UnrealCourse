@@ -3,6 +3,7 @@
 #pragma once
 
 #include "Tank.h"
+#include "Engine/World.h"
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
 #include "TankPlayerController.generated.h"
@@ -27,6 +28,7 @@ private:
 
     void AimTowardsCrosshair();
     bool GetSightRayHitLocation(FVector& HitLocation) const;
+    bool GetLookDirectionHitLocation(FVector CameraLocation, FVector LookDirection, FVector& HitLocation) const;
 
     ATank* ControlledTank;
 
@@ -34,4 +36,6 @@ private:
     float CrosshairXLocation = 0.5f;
     UPROPERTY(EditAnywhere)
     float CrosshairYLocation = 0.333333333f;
+    UPROPERTY(EditAnywhere)
+    float LineTraceRangeKM = 10.0f;
 };

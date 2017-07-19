@@ -39,20 +39,46 @@ void ATankPlayerController::AimTowardsCrosshair() {
 
     FVector HitLocation;
     if (GetSightRayHitLocation(HitLocation)) {
-        UE_LOG(LogTemp, Warning, TEXT("Look Direction: %s"), *HitLocation.ToString());
+        UE_LOG(LogTemp, Warning, TEXT("Hit Location: %s"), *HitLocation.ToString());
         // TODO: aim at thing
     } else {
-        UE_LOG(LogTemp, Warning, TEXT("Nothing found"));
+        //UE_LOG(LogTemp, Warning, TEXT("Nothing found"));
     }
 }
 
 bool ATankPlayerController::GetSightRayHitLocation(FVector& HitLocation) const {
     // Find crosshair
     int32 ViewportSizeX, ViewportSizeY;
-    GetViewportSize(ViewportSizeX, ViewportSizeY);
-    // Deproject screen position of crosshair to world direction
+    FVector CameraLocation, LookDirection;
 
+    GetViewportSize(ViewportSizeX, ViewportSizeY);
     FVector2D ScreenLocation = FVector2D(CrosshairXLocation * ViewportSizeX, CrosshairYLocation * ViewportSizeY);
+
+    // Deproject screen position of crosshair to world direction
+    if (!DeprojectScreenPositionToWorld(ScreenLocation.X, ScreenLocation.Y, CameraLocation, LookDirection)) return false;
+
     // raytrace along direction up to some max range
+    if (!GetLookDirectionHitLocation(CameraLocation, LookDirection, HitLocation)) return false;
+
     return true;
+}
+
+
+bool ATankPlayerController::GetLookDirectionHitLocation(FVector CameraLocation, FVector LookDirection, FVector& HitLocation) const {
+    FHitResult HitResult;
+
+    if (GetWorld()->LineTraceSingleByChannel(
+        HitResult,
+        CameraLocation,
+        CameraLocation + LookDirection * LineTraceRangeKM * 100000,
+        ECollisionChannel::ECC_Visibility,
+        FCollisionQueryParams(FName(TEXT("")), false, GetOwner()),
+        FCollisionResponseParams()
+    )) {
+        HitLocation = HitResult.Location;
+        return true;
+    } else {
+        HitLocation = FVector(0.0f);
+        return false;
+    }
 }
