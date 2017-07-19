@@ -2,12 +2,18 @@
 
 #include "TankPlayerController.h"
 
+ATankPlayerController::ATankPlayerController()
+{
+    // Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
+    // off to improve performance if you don't need them.
+    PrimaryActorTick.bCanEverTick = true;
+}
+
 
 void ATankPlayerController::BeginPlay() {
     Super::BeginPlay();
 
-    ATank* ControlledTank = GetControlledTank();
-
+    ControlledTank = GetControlledTank();
     if (ControlledTank) {
         UE_LOG(LogTemp, Warning, TEXT("PlayerController:: BeginPlay: %s"), *ControlledTank->GetName());
     } else {
@@ -16,7 +22,18 @@ void ATankPlayerController::BeginPlay() {
 }
 
 
+void ATankPlayerController::Tick(float DeltaTime)
+{
+    Super::Tick(DeltaTime);
+    AimTowardsCrosshair();
+}
+
 
 ATank* ATankPlayerController::GetControlledTank() const {
     return Cast<ATank>(GetPawn());
+}
+
+
+void ATankPlayerController::AimTowardsCrosshair() {
+    if (!ControlledTank) return;
 }
