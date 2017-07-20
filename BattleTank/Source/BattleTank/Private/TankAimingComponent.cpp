@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TankAimingComponent.h"
+#include "TankBarrel.h"
 
 
 // Sets default values for this component's properties
@@ -46,10 +47,12 @@ void UTankAimingComponent::MoveBarrel(FVector AimDirection) {
     UE_LOG(LogTemp, Warning, TEXT("%s Aiming at: %s"),
            *GetOwner()->GetName(),
            *AimDirection.ToString());
+
+    BarrelComponent->Elevate(5.0f);
 }
 
 
-void UTankAimingComponent::SetBarrelReference(UStaticMeshComponent* BarrelToSet) {
+void UTankAimingComponent::SetBarrelReference(UTankBarrel* BarrelToSet) {
     BarrelComponent = BarrelToSet;
 }
 
