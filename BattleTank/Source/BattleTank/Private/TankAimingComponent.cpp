@@ -53,7 +53,7 @@ void UTankAimingComponent::MoveBarrel(FVector AimDirection) {
            *GetOwner()->GetName(),
            *AimDirection.ToString());
 
-    BarrelComponent->Elevate(5.0f);
+    BarrelComponent->Elevate(DeltaRotator.Pitch);
 }
 
 
