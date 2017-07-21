@@ -33,10 +33,10 @@ private:
 
     ATank* ControlledTank;
 
-    UPROPERTY(EditAnywhere)
+    UPROPERTY(EditDefaultsOnly)
     float CrosshairXLocation = 0.5f;
-    UPROPERTY(EditAnywhere)
+    UPROPERTY(EditDefaultsOnly)
     float CrosshairYLocation = 0.333333333f;
-    UPROPERTY(EditAnywhere)
+    UPROPERTY(EditDefaultsOnly)
     float LineTraceRangeKM = 10.0f;
 };
