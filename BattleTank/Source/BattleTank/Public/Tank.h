@@ -8,6 +8,7 @@
 
 
 class UTankBarrel;
+class UTankTurret;
 class UTankAimingComponent;
 
 
@@ -22,6 +23,8 @@ public:
 
     UFUNCTION(BlueprintCallable, Category=Setup)
     void SetBarrelReference(UTankBarrel* Barrel);
+    UFUNCTION(BlueprintCallable, Category=Setup)
+    void SetTurretReference(UTankTurret* Turret);
     void AimAt(FVector HitLocation);
 
 protected:

@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "TankAimingComponent.h"
 #include "TankBarrel.h"
+#include "TankTurret.h"
 
 #include "Kismet/GameplayStatics.h"
 #include "Components/ActorComponent.h"
@@ -41,23 +42,36 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed) {
     FVector AimDirection = LaunchVelocity.GetSafeNormal();
 
     MoveBarrel(AimDirection);
+    MoveTurret(AimDirection);
 }
 
 
 void UTankAimingComponent::MoveBarrel(FVector AimDirection) {
-    FRotator CurrentRotation = BarrelComponent->GetForwardVector().Rotation();
-    FRotator AimRotation = AimDirection.Rotation();
+    if (!BarrelComponent) return;
 
-    FRotator DeltaRotator = AimRotation - CurrentRotation;
-    UE_LOG(LogTemp, Warning, TEXT("%s Aiming at: %s"),
-           *GetOwner()->GetName(),
-           *AimDirection.ToString());
+    FRotator CurrentRotation = BarrelComponent->GetForwardVector().Rotation();
+    FRotator DeltaRotator = AimDirection.Rotation() - CurrentRotation;
 
     BarrelComponent->Elevate(DeltaRotator.Pitch);
 }
 
 
+void UTankAimingComponent::MoveTurret(FVector AimDirection) {
+    if (!TurretComponent) return;
+
+    FRotator CurrentRotation = TurretComponent->GetForwardVector().Rotation();
+    FRotator DeltaRotator = AimDirection.Rotation() - CurrentRotation;
+
+    TurretComponent->Turn(DeltaRotator.Yaw);
+}
+
+
 void UTankAimingComponent::SetBarrelReference(UTankBarrel* BarrelToSet) {
     BarrelComponent = BarrelToSet;
+}
+
+
+void UTankAimingComponent::SetTurretReference(UTankTurret* TurretToSet) {
+    TurretComponent = TurretToSet;
 }
 

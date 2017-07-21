@@ -7,6 +7,7 @@
 
 
 class UTankBarrel;
+class UTankTurret;
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -19,10 +20,12 @@ public:
 	UTankAimingComponent();
 
     void SetBarrelReference(UTankBarrel* BarrelToSet);
+    void SetTurretReference(UTankTurret* TurretToSet);
     void AimAt(FVector HitLocation, float LaunchSpeed);
 
 private:
     UTankBarrel* BarrelComponent = nullptr;
+    UTankTurret* TurretComponent = nullptr;
     void MoveBarrel(FVector AimDirection);
-	
+	void MoveTurret(FVector AimDirection);
 };
