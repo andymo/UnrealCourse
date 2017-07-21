@@ -26,6 +26,8 @@ public:
     UFUNCTION(BlueprintCallable, Category=Setup)
     void SetTurretReference(UTankTurret* Turret);
     void AimAt(FVector HitLocation);
+    UFUNCTION(BlueprintCallable)
+    void Fire();
 
 protected:
     // Called when the game starts or when spawned
@@ -39,5 +41,5 @@ private:
     virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
     
     UPROPERTY(EditAnywhere, Category=Firing)
-    float LaunchSpeed = 100000;
+    float LaunchSpeed = 400000;
 };
