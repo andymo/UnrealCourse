@@ -29,4 +29,6 @@ private:
 
     ATank* ControlledTank;
     ATank* PlayerTank;
+
+    float PlayerFindAcceptanceRadius = 3000.0f;
 };

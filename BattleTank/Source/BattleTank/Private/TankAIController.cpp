@@ -38,8 +38,8 @@ void ATankAIController::BeginPlay() {
 void ATankAIController::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
+    MoveToActor(PlayerTank, PlayerFindAcceptanceRadius);
     AimTowardsPlayer();
-
     ControlledTank->Fire();
 }
 
