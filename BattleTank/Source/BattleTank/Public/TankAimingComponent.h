@@ -26,7 +26,7 @@ public:
 	// Sets default values for this component's properties
 	UTankAimingComponent();
 
-    UFUNCTION(BlueprintCallable, Category=Setup)
+    UFUNCTION(BlueprintCallable, Category="Setup")
     void Initialise(UTankBarrel* Barrel, UTankTurret* Turret);
 
     UTankBarrel* GetBarrel() const;
