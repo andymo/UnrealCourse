@@ -8,6 +8,7 @@
 
 
 class ATank;
+class UTankAimingComponent;
 
 /**
  * 
@@ -25,6 +26,10 @@ public:
 	
 protected:
 	virtual void BeginPlay() override;
+
+    UFUNCTION(BlueprintImplementableEvent, Category="Setup")
+    void FoundAimingComponent(UTankAimingComponent* AimingCompRef);
+
 
 private:
     virtual void Tick(float DeltaTime) override;

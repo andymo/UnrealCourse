@@ -25,7 +25,7 @@ void UTankAimingComponent::Initialise(UTankBarrel* Barrel, UTankTurret* Turret) 
 
 
 void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed) {
-    if (!BarrelComponent) {
+    if (!ensure(BarrelComponent)) {
         UE_LOG(LogTemp, Warning, TEXT("%s has no barrel"), *GetOwner()->GetName());
         return;
     }
@@ -53,7 +53,7 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed) {
 
 
 void UTankAimingComponent::MoveBarrel(FVector AimDirection) {
-    if (!BarrelComponent) return;
+    if (!ensure(BarrelComponent)) return;
 
     FRotator CurrentRotation = BarrelComponent->GetForwardVector().Rotation();
     FRotator DeltaRotator = AimDirection.Rotation() - CurrentRotation;
@@ -63,7 +63,7 @@ void UTankAimingComponent::MoveBarrel(FVector AimDirection) {
 
 
 void UTankAimingComponent::MoveTurret(FVector AimDirection) {
-    if (!TurretComponent) return;
+    if (!ensure(TurretComponent)) return;
 
     FRotator CurrentRotation = TurretComponent->GetForwardVector().Rotation();
     FRotator DeltaRotator = AimDirection.Rotation() - CurrentRotation;

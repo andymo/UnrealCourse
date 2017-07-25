@@ -11,13 +11,13 @@ void UTankMovementComponent::Initialise(UTankTrack* Left, UTankTrack* Right) {
 
 
 void UTankMovementComponent::IntendMoveForward(float Throw) {
-    if (!LTankTrack || !RTankTrack) return;
+    if (!ensure(LTankTrack && RTankTrack)) return;
     LTankTrack->SetThrottle(Throw);
     RTankTrack->SetThrottle(Throw);
 }
 
 void UTankMovementComponent::IntendTurnRight(float Throw) {
-    if (!LTankTrack || !RTankTrack) return;
+    if (!ensure(LTankTrack && RTankTrack)) return;
     LTankTrack->SetThrottle(Throw);
     RTankTrack->SetThrottle(-Throw);
 }

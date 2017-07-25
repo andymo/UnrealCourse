@@ -15,19 +15,19 @@ void ATankAIController::BeginPlay() {
     Super::BeginPlay();
 
     ControlledTank = Cast<ATank>(GetPawn());
-    if (ControlledTank) {
+    if (ensure(ControlledTank)) {
         UE_LOG(LogTemp, Warning, TEXT("TankAIController:: BeginPlay: %s"), *ControlledTank->GetName());
     } else {
         UE_LOG(LogTemp, Warning, TEXT("FFFF NOTHING!!!!"));
     }
 
     auto PlayerTankController = GetWorld()->GetFirstPlayerController();
-    if (!PlayerTankController)
+    if (!ensure(PlayerTankController))
         PlayerTank =  nullptr;
     else
         PlayerTank = Cast<ATank>(PlayerTankController->GetPawn());
 
-    if (PlayerTank) {
+    if (ensure(PlayerTank)) {
         UE_LOG(LogTemp, Warning, TEXT("TankAIController:: FoundPlayer: %s"), *PlayerTank->GetName());
     } else {
         UE_LOG(LogTemp, Warning, TEXT("DID NOT FIND PLAYER"));
@@ -45,7 +45,7 @@ void ATankAIController::Tick(float DeltaTime)
 
 
 void ATankAIController::AimTowardsPlayer() {
-    if (!ControlledTank || !PlayerTank) return;
+    if (!ensure(ControlledTank && PlayerTank)) return;
 
     ControlledTank->AimAt(PlayerTank->GetActorLocation());
 }

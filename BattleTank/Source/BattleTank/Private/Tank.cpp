@@ -17,9 +17,11 @@ ATank::ATank()
 // Called when the game starts or when spawned
 void ATank::BeginPlay()
 {
-	Super::BeginPlay();
-
     UTankAimingComponent* TankAimingComponent = FindComponentByClass<UTankAimingComponent>();
+    if (!ensure(TankAimingComponent)) {
+        UE_LOG(LogTemp, Warning, TEXT("COULD NOT FIND A TANK AIMING COMPONENT"));
+    }
+	Super::BeginPlay();
 }
 
 
@@ -32,16 +34,19 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 
 void ATank::AimAt(FVector HitLocation) {
+    if (!ensure(TankAimingComponent)) return;
     TankAimingComponent->AimAt(HitLocation, LaunchSpeed);
 }
 
 
 void ATank::Fire() {
+    if (!ensure(TankAimingComponent)) return;
+
     double CurrentTime = FPlatformTime::Seconds();
     bool Ready = (CurrentTime - LastFireTime) > ReloadTimeSeconds;
 
     UTankBarrel* BarrelComponent = TankAimingComponent->GetBarrel();
-    if (!BarrelComponent || !Ready) return;
+    if (!ensure(BarrelComponent && Ready)) return;
 
     AProjectile* Projectile = GetWorld()->SpawnActor<AProjectile>(
         ProjectileBlueprint,
