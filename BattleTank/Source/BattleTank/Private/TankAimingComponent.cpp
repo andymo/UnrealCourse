@@ -18,6 +18,12 @@ UTankAimingComponent::UTankAimingComponent()
 }
 
 
+void UTankAimingComponent::Initialise(UTankBarrel* Barrel, UTankTurret* Turret) {
+    BarrelComponent = Barrel;
+    TurretComponent = Turret;
+}
+
+
 void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed) {
     if (!BarrelComponent) {
         UE_LOG(LogTemp, Warning, TEXT("%s has no barrel"), *GetOwner()->GetName());
@@ -65,13 +71,6 @@ void UTankAimingComponent::MoveTurret(FVector AimDirection) {
     TurretComponent->Turn(DeltaRotator.Yaw);
 }
 
-
-void UTankAimingComponent::SetBarrelReference(UTankBarrel* BarrelToSet) {
-    BarrelComponent = BarrelToSet;
+UTankBarrel* UTankAimingComponent::GetBarrel() const {
+    return BarrelComponent;
 }
-
-
-void UTankAimingComponent::SetTurretReference(UTankTurret* TurretToSet) {
-    TurretComponent = TurretToSet;
-}
-
