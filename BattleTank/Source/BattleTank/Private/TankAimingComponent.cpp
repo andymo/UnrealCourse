@@ -76,7 +76,7 @@ void UTankAimingComponent::MoveTurret(FVector AimDirection) {
 void UTankAimingComponent::Fire() {
     double CurrentTime = FPlatformTime::Seconds();
     bool Ready = (CurrentTime - LastFireTime) > ReloadTimeSeconds;
-    if (!ensure(BarrelComponent) || !Ready) return;
+    if (!ensure(BarrelComponent && ProjectileBlueprint) || !Ready) return;
 
     AProjectile* Projectile = GetWorld()->SpawnActor<AProjectile>(
         ProjectileBlueprint,
