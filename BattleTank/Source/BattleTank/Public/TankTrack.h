@@ -25,5 +25,10 @@ public:
     float MaxTrackDriveForce = 40000000;
 
 protected:
+    virtual void BeginPlay() override;
     virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
+
+private:
+    UFUNCTION(BlueprintCallable, Category="Collision")
+    void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
 };
