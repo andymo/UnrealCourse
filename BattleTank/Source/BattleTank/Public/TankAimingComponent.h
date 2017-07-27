@@ -35,6 +35,9 @@ public:
     void AimAt(FVector HitLocation);
 
 protected:
+    virtual void BeginPlay() override;
+    virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
+
     UPROPERTY(BlueprintReadOnly, Category="State")
     EFiringState FiringState = EFiringState::Reloading;
 

@@ -13,9 +13,18 @@ UTankAimingComponent::UTankAimingComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = false;
+	PrimaryComponentTick.bCanEverTick = true;
+}
 
-	// ...
+void UTankAimingComponent::BeginPlay() {
+    Super::BeginPlay();
+}
+
+void UTankAimingComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) {
+    Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+    if ((FPlatformTime::Seconds() - LastFireTime) > ReloadTimeSeconds) {
+        FiringState = EFiringState::Locked;
+    }
 }
 
 
@@ -74,9 +83,8 @@ void UTankAimingComponent::MoveTurret(FVector AimDirection) {
 
 
 void UTankAimingComponent::Fire() {
-    double CurrentTime = FPlatformTime::Seconds();
-    bool Ready = (CurrentTime - LastFireTime) > ReloadTimeSeconds;
-    if (!ensure(BarrelComponent && ProjectileBlueprint) || !Ready) return;
+    if (!ensure(BarrelComponent && ProjectileBlueprint)) return;
+    if (FiringState == EFiringState::Reloading) return;
 
     AProjectile* Projectile = GetWorld()->SpawnActor<AProjectile>(
         ProjectileBlueprint,
@@ -85,5 +93,6 @@ void UTankAimingComponent::Fire() {
     );
     Projectile->Launch(LaunchSpeed);
 
-    LastFireTime = CurrentTime;
+    LastFireTime = FPlatformTime::Seconds();
+    FiringState = EFiringState::Reloading;
 }
