@@ -39,7 +39,7 @@ void ATankAIController::Tick(float DeltaTime)
 
     MoveToActor(PlayerTank, PlayerFindAcceptanceRadius);
     AimTowardsPlayer();
-    //Cast<ATank>(GetPawn())->Fire();
+    AimingComponent->Fire();
 }
 
 

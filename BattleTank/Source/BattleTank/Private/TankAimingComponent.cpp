@@ -2,6 +2,7 @@
 #include "TankAimingComponent.h"
 #include "TankBarrel.h"
 #include "TankTurret.h"
+#include "Projectile.h"
 
 #include "Kismet/GameplayStatics.h"
 #include "Components/ActorComponent.h"
@@ -71,6 +72,18 @@ void UTankAimingComponent::MoveTurret(FVector AimDirection) {
     TurretComponent->Turn(DeltaRotator.Yaw);
 }
 
-UTankBarrel* UTankAimingComponent::GetBarrel() const {
-    return BarrelComponent;
+
+void UTankAimingComponent::Fire() {
+    double CurrentTime = FPlatformTime::Seconds();
+    bool Ready = (CurrentTime - LastFireTime) > ReloadTimeSeconds;
+    if (!ensure(BarrelComponent) || !Ready) return;
+
+    AProjectile* Projectile = GetWorld()->SpawnActor<AProjectile>(
+        ProjectileBlueprint,
+        BarrelComponent->GetSocketLocation(FName("LaunchLocation")),
+        BarrelComponent->GetSocketRotation(FName("LaunchLocation"))
+    );
+    Projectile->Launch(LaunchSpeed);
+
+    LastFireTime = CurrentTime;
 }
