@@ -1,6 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "TankPlayerController.h"
-#include "Tank.h"
 #include "TankAimingComponent.h"
 
 #include "Engine/World.h"
@@ -17,14 +16,7 @@ ATankPlayerController::ATankPlayerController()
 void ATankPlayerController::BeginPlay() {
     Super::BeginPlay();
 
-    ControlledTank = GetControlledTank();
-    if (ensure(ControlledTank)) {
-        UE_LOG(LogTemp, Warning, TEXT("PlayerController:: BeginPlay: %s"), *ControlledTank->GetName());
-    } else {
-        UE_LOG(LogTemp, Warning, TEXT("FFFF NOTHING!!!!"));
-    }
-
-    auto AimingComponent = GetControlledTank()->FindComponentByClass<UTankAimingComponent>();
+    auto AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
     if (ensure(AimingComponent))
         FoundAimingComponent(AimingComponent);
     else
@@ -39,17 +31,13 @@ void ATankPlayerController::Tick(float DeltaTime)
 }
 
 
-ATank* ATankPlayerController::GetControlledTank() const {
-    return Cast<ATank>(GetPawn());
-}
-
-
 void ATankPlayerController::AimTowardsCrosshair() {
-    if (!ensure(ControlledTank)) return;
+    auto AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
+    if (!ensure(AimingComponent)) return;
 
     FVector HitLocation;
     if (GetSightRayHitLocation(HitLocation)) {
-        ControlledTank->AimAt(HitLocation);
+        AimingComponent->AimAt(HitLocation);
     } else {
         //UE_LOG(LogTemp, Warning, TEXT("Nothing found"));
     }
